@@ -1,7 +1,7 @@
 OBJS = orderStore.o emdrListener.o evePwnServer.o
 
 CXXFLAGS=-O2 -g -Werror -Wall -std=c++11
-INCLUDE=-lmsgpack -ljansson -lzmq -lz
+INCLUDE=-lmsgpack -ljansson -lzmq -lz -lpthread
 
 all : orderServer
 
