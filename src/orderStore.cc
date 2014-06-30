@@ -88,7 +88,7 @@ void OrderStore :: absorbOrders (std::list <Order *> & orders) {
         stationIDMap[order->g_stationID()].insert(order);
     }
 
-    while (orders.size() > ORDERSTORE_SIZE) {
+    while (this->orders.size() > ORDERSTORE_SIZE) {
         Order * order = this->orders.front();
         typeIDMap[order->g_typeID()].erase(order);
         stationIDMap[order->g_stationID()].erase(order);

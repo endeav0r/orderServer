@@ -85,8 +85,6 @@ class OrderStore {
         std::map   <uint32_t, std::unordered_set <Order *>> typeIDMap;
         std::map   <uint32_t, std::unordered_set <Order *>> stationIDMap;
 
-        std::queue <Order *> writeQueue;
-
         pthread_mutex_t readLock;
         pthread_mutex_t writeLock;
         unsigned int readCount;

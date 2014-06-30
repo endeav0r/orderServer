@@ -15,7 +15,7 @@ int main (int argc, char * argv[]) {
     evePwnServer.run();
 
     while (true) {
-        usleep(30*1000000);
+        usleep(60*1000000);
         std::cout << "orderStore->size() = " << orderStore->size() << std::endl;
     }
 
