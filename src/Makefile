@@ -16,4 +16,4 @@ orderServer : $(OBJS) main.cc
 
 clean :
 	rm -f *.o
-	rm -f evepwn
+	rm -f orderServer
