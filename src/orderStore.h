@@ -95,8 +95,8 @@ class OrderStore {
         void absorbOrder (Order * order);
         void absorbOrders (std::list <Order *> & orders);
         uint32_t size () { return orders.size(); }
-        bool packTypeID    (uint32_t typeID, msgpack::sbuffer & buffer);
-        bool packStationID (uint32_t stationID, msgpack::sbuffer & buffer);
+        bool packTypeID    (uint32_t typeID, msgpack::packer <msgpack::sbuffer> & pk);
+        bool packStationID (uint32_t stationID, msgpack::packer <msgpack::sbuffer> &pk);
 };
 
 #endif

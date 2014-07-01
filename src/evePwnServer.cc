@@ -42,15 +42,51 @@ void * EvePwnServer :: listenLoop () {
 
         umap["action"].convert(&action);
 
+        std::cout << "action=" << action << std::endl;
+
         if (action == "orders.typeID") {
             if (umap.count("typeID") == 0)
                 continue;
             umap["typeID"].convert(&id);
 
             msgpack::sbuffer buffer;
-            orderStore->packTypeID(id, buffer);
+            msgpack::packer<msgpack::sbuffer> pk(&buffer);
+
+            pk.pack_map(3);
+            pk.pack(std::string("typeID"));
+            pk.pack_uint32(id);
+            pk.pack(std::string("action"));
+            pk.pack(std::string("orders.typeID"));
+            pk.pack(std::string("orders"));
+
+            orderStore->packTypeID(id, pk);
 
             std::cout << "orders.typeID id=" << id << " size=" << buffer.size() << std::endl;
+
+            sendBuffer(buffer);
+        }
+        else if (action == "orders.typeIDs") {
+            if (umap.count("typeIDs") == 0)
+                continue;
+            std::vector <uint32_t> typeIDs;
+            umap["typeIDs"].convert(&typeIDs);
+
+            msgpack::sbuffer buffer;
+            msgpack::packer<msgpack::sbuffer> pk(&buffer);
+
+            pk.pack_map(2);
+            pk.pack(std::string("action"));
+            pk.pack(std::string("orders.typeIDs"));
+            pk.pack(std::string("orders"));
+            pk.pack_map(typeIDs.size());
+
+            std::vector <uint32_t> :: iterator it;
+            for (it = typeIDs.begin(); it != typeIDs.end(); it++) {
+                pk.pack_uint32(*it);
+                orderStore->packTypeID(*it, pk);
+            }
+
+            std::cout << "orders.typeIDs size=" << buffer.size() << std::endl;
 
             sendBuffer(buffer);
         }
@@ -60,7 +96,16 @@ void * EvePwnServer :: listenLoop () {
             umap["stationID"].convert(&id);
 
             msgpack::sbuffer buffer;
-            orderStore->packStationID(id, buffer);
+            msgpack::packer<msgpack::sbuffer> pk(&buffer);
+
+            pk.pack_map(3);
+            pk.pack(std::string("stationID"));
+            pk.pack_uint32(id);
+            pk.pack(std::string("action"));
+            pk.pack(std::string("orders.stationID"));
+            pk.pack(std::string("orders"));
+
+            orderStore->packStationID(id, pk);
 
             std::cout << "orders.stationID id=" << id << " size=" << buffer.size() << std::endl;
 

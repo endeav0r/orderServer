@@ -100,23 +100,15 @@ void OrderStore :: absorbOrders (std::list <Order *> & orders) {
 }
 
 
-bool OrderStore :: packTypeID (uint32_t typeID, msgpack::sbuffer & buffer) {
+bool OrderStore :: packTypeID (uint32_t typeID, msgpack::packer <msgpack::sbuffer> & pk) {
     pthread_mutex_lock(&writeLock);
     pthread_mutex_lock(&readLock);
     readCount++;
     pthread_mutex_unlock(&readLock);
     pthread_mutex_unlock(&writeLock);
 
-    msgpack::packer<msgpack::sbuffer> pk(&buffer);
-
     std::unordered_set <Order *> :: iterator it;
 
-    pk.pack_map(3);
-    pk.pack(std::string("typeID"));
-    pk.pack_uint32(typeID);
-    pk.pack(std::string("action"));
-    pk.pack(std::string("orders.typeID"));
-    pk.pack(std::string("orders"));
     pk.pack_array(typeIDMap[typeID].size());
 
     for (it = typeIDMap[typeID].begin(); it != typeIDMap[typeID].end(); it++) {
@@ -131,23 +123,15 @@ bool OrderStore :: packTypeID (uint32_t typeID, msgpack::sbuffer & buffer) {
 }
 
 
-bool OrderStore :: packStationID (uint32_t stationID, msgpack::sbuffer & buffer) {
+bool OrderStore :: packStationID (uint32_t stationID, msgpack::packer <msgpack::sbuffer> & pk) {
     pthread_mutex_lock(&writeLock);
     pthread_mutex_lock(&readLock);
     readCount++;
     pthread_mutex_unlock(&readLock);
     pthread_mutex_unlock(&writeLock);
 
-    msgpack::packer<msgpack::sbuffer> pk(&buffer);
-
     std::unordered_set <Order *> :: iterator it;
 
-    pk.pack_map(3);
-    pk.pack(std::string("stationID"));
-    pk.pack_uint32(stationID);
-    pk.pack(std::string("action"));
-    pk.pack(std::string("orders.stationID"));
-    pk.pack(std::string("orders"));
     pk.pack_array(stationIDMap[stationID].size());
 
     for (it = stationIDMap[stationID].begin(); it != stationIDMap[stationID].end(); it++) {
